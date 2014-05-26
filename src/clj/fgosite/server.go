@@ -29,7 +29,7 @@ func renderApp() {
 
 func handler(request) {
 	if "/" == URI(request) {
-		response.redirect("/help.html")
+		response.redirect("/index.html")
 	} else {
 		renderApp()
 	}

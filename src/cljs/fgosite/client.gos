@@ -2,29 +2,29 @@
 package client
 
 import macros hiccups   "hiccups/core"
-//import        hiccupsrt "hiccups/runtime"
 
 func<hiccups.defhtml> myTemplate() {
-	[DIV,
-		[A, {HREF: "https://github.com/weavejester/hiccup"},
-			"Hiccup"
+	[DIV.CONTAINER,
+		[DIV.ROW,
+			[TEXTAREA.COL_XS_12.COL_SM_6,
+				"Go code goes here"
+			],
+			[TEXTAREA.COL_XS_12.COL_SM_6,
+				"Clojure code goes here"
+			]
+		],
+		[DIV.ROW,
+			[TEXTAREA.COL_SM_12,
+				"Output goes here"
+			]
 		]
 	]
 }
 
-
-
-func handleClick() {
-	js.alert("Hello!")
+js.window->_start  mutateSet  func(){
+	const insertHere = js.document->getElementById("insert-here")
+	insertHere->_innerHTML  mutateSet  myTemplate()
 }
 
-var clickable = js.document->getElementById("clickable")
 
-
-
-clickable->addEventListener("click", handleClick)
-
-
-var insertHere = js.document->getElementById("insert-here")
-insertHere->_innerHTML  mutateSet  myTemplate()
 
