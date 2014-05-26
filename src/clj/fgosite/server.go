@@ -19,6 +19,7 @@ func renderApp() {
     <div>
       <p id="clickable">Click me!</p>
     </div>
+    <div id="insert-here"/>
     <script src="js/cljs.js"></script>
   </body>
 </html>
