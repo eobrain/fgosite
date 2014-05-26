@@ -1,7 +1,7 @@
 /resources/public/js
 /target
 *~
-/src/*.clj
-/src/*.cljs
+/src/**/*.clj
+/src/**/*.cljs
 
 
