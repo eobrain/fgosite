@@ -1,0 +1,7 @@
+/resources/public/js
+/target
+*~
+/src/*.clj
+/src/*.cljs
+
+

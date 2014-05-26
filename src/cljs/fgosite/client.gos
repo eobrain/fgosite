@@ -1,0 +1,11 @@
+// -*- mode: go -*-
+package client
+
+func handleClick() {
+	js.alert("Hello!")
+}
+
+var clickable = js.document->getElementById("clickable")
+
+clickable->addEventListener("click", handleClick)
+

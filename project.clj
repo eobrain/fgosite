@@ -3,9 +3,11 @@
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2156"]
-                 [ring "1.2.1"]]
+                 [ring "1.2.1"]
+                 [org.eamonn.funcgo/funcgo-lein-plugin "0.2.3-SNAPSHOT"] ]
   :plugins [[lein-cljsbuild "1.0.2"]
-            [lein-ring "0.8.10"]]
+            [lein-ring "0.8.10"]
+            [org.eamonn.funcgo/funcgo-lein-plugin "0.2.3-SNAPSHOT"]]
   :hooks [leiningen.cljsbuild]
   :source-paths ["src/clj"]
   :cljsbuild { 
