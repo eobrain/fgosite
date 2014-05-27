@@ -3,13 +3,16 @@ package client
 
 import macros hiccups   "hiccups/core"
 
+const jQuery = \`js/jQuery`
+
+
 func<hiccups.defhtml> myTemplate() {
 	[DIV.CONTAINER,
 		[DIV.ROW,
 			[TEXTAREA.COL_XS_12.COL_SM_6,
 				"Go code goes here"
 			],
-			[TEXTAREA.COL_XS_12.COL_SM_6,
+			[TEXTAREA#FGO.COL_XS_12.COL_SM_6,
 				"Clojure code goes here"
 			]
 		],
@@ -21,10 +24,13 @@ func<hiccups.defhtml> myTemplate() {
 	]
 }
 
-js.window->_start  mutateSet  func(){
+jQuery(func(){
 	const insertHere = js.document->getElementById("insert-here")
 	insertHere->_innerHTML  mutateSet  myTemplate()
-}
 
 
+	jQuery->get("/fgo/abc", func(data){
+		jQuery("#fgo")->html(data)
+	})
 
+})
