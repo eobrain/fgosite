@@ -5,6 +5,8 @@
                  [org.eamonn.funcgo/funcgo-lein-plugin "0.2.3-SNAPSHOT"]
                  [org.clojure/clojurescript "0.0-2156"]
                  [ring "1.2.1"]
+                 [compojure "1.1.8"]
+                 [liberator "0.11.0"]
                  [hiccups "0.3.0"]]
   :plugins [[org.eamonn.funcgo/funcgo-lein-plugin "0.2.3-SNAPSHOT"]
             [lein-cljsbuild "1.0.2"]

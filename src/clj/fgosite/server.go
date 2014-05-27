@@ -1,41 +1,23 @@
 package server
 import (
+	"clojure/java/io"
 	"ring/adapter/jetty"
-	"ring/middleware/resource"
-	"ring/util/response"
+	"compojure/route"
+	compojure "compojure/core"
+	rest "liberator/core"
 )
 
+rest.defresource(helloWorld,
+	AVAILABLE_MEDIA_TYPES, ["text/plain"],
+	HANDLE_OK,"Hello, world! -- 2"
+)
 
-func renderApp() {
-	{
-		STATUS:  200,
-		HEADERS: {"Content-Type": "text/html"},
-		BODY: 	 `<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="css/page.css" />
-  </head>
-  <body>
-    <div>
-      <p id="clickable">Click me!</p>
-    </div>
-    <div id="insert-here"/>
-    <script src="js/cljs.js"></script>
-  </body>
-</html>
-`
-	}
-}
-
-func handler(request) {
-	if "/" == URI(request) {
-		response.redirect("/index.html")
-	} else {
-		renderApp()
-	}
-}
-
-var app = resource.wrapResource(handler, "public")
+compojure.defroutes(app,
+	compojure.GET("/",      [], io.resource("public/index.html")),
+	compojure.GET("/hello", [], helloWorld),
+	route.resources("/"),
+	route.notFound("<h1>Page not found</h1>")
+)
 
 func _main(args...) {
 	app  jetty.runJetty  {PORT: 3000}
