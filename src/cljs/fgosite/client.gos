@@ -9,15 +9,21 @@ const jQuery = \`js/jQuery`
 func<hiccups.defhtml> myTemplate() {
 	[DIV.CONTAINER,
 		[DIV.ROW,
-			[TEXTAREA.COL_XS_12.COL_SM_6,
-				"Go code goes here"
+			[TEXTAREA.FORM_CONTROL.COL_MD_6, {ROWS: 10},
+				`package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, 世界")
+}`
 			],
-			[TEXTAREA#FGO.COL_XS_12.COL_SM_6,
+			[TEXTAREA#FGO.FORM_CONTROL.COL_MD_6, {ROWS: 10},
 				"Clojure code goes here"
 			]
 		],
 		[DIV.ROW,
-			[TEXTAREA.COL_SM_12,
+			[TEXTAREA.FORM_CONTROL.COL_MD_12, {ROWS: 10},
 				"Output goes here"
 			]
 		]
