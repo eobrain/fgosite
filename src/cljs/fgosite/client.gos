@@ -9,7 +9,7 @@ const jQuery = \`js/jQuery`
 func<hiccups.defhtml> myTemplate() {
 	[DIV.CONTAINER,
 		[DIV.ROW,
-			[TEXTAREA.FORM_CONTROL.COL_MD_6, {ROWS: 10},
+			[TEXTAREA#FGO.FORM_CONTROL.COL_MD_6, {ROWS: 10},
 				`package main
 
 import "fmt"
@@ -18,7 +18,7 @@ func main() {
     fmt.Println("Hello, 世界")
 }`
 			],
-			[TEXTAREA#FGO.FORM_CONTROL.COL_MD_6, {ROWS: 10},
+			[TEXTAREA#CLJ.FORM_CONTROL.COL_MD_6, {ROWS: 10},
 				"Clojure code goes here"
 			]
 		],
@@ -33,10 +33,12 @@ func main() {
 jQuery(func(){
 	const insertHere = js.document->getElementById("insert-here")
 	insertHere->_innerHTML  mutateSet  myTemplate()
+	{
+		const hash = js.md5(jQuery("#fgo")->text())
 
-
-	jQuery->get("/fgo/abc", func(data){
-		jQuery("#fgo")->html(data)
-	})
+		jQuery->get("/fgo/"  str  hash, func(data){
+			jQuery("#clj")->html(data)
+		})
+	}
 
 })

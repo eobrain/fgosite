@@ -1,4 +1,4 @@
-/resources/public/js
+/resources/public/js/cljs.js
 /target
 *~
 /src/**/*.clj
