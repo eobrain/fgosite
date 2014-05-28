@@ -34,11 +34,22 @@ jQuery(func(){
 	const insertHere = js.document->getElementById("insert-here")
 	insertHere->_innerHTML  mutateSet  myTemplate()
 	{
-		const hash = js.md5(jQuery("#fgo")->text())
+		const(
+			fgoText = jQuery("#fgo")->text()
+			hash    = js.md5(fgoText)
+		)
 
-		jQuery->get("/fgo/"  str  hash, func(data){
-			jQuery("#clj")->html(data)
-		})
+		jQuery->ajax(jsObj(
+			"type",    "PUT",
+			"url",     str("/", hash, "/fgo"),
+			"data",    fgoText,
+			"success", func(){
+				jQuery->get(str("/", hash, "/clj"), func(cljText){
+					jQuery("#clj")->html(cljText)
+				})
+			},
+		))
+		
 	}
 
 })
