@@ -30,26 +30,38 @@ func main() {
 	]
 }
 
+func ajaxPut(url, data, success) {
+	jQuery->ajax(jsObj(
+		"type",    "PUT",
+		"url",     url,
+		"data",    data,
+		"success", success
+	))
+}
+
+func ajaxGet(url, resultIs) {
+	jQuery->get(url, resultIs)
+}
+
 jQuery(func(){
 	const insertHere = js.document->getElementById("insert-here")
 	insertHere->_innerHTML  mutateSet  myTemplate()
 	{
 		const(
 			fgoText = jQuery("#fgo")->text()
-			hash    = js.md5(fgoText)
+			prefix  = "/"  str  js.md5(fgoText)
 		)
+		func getClj() {
+			ajaxGet(prefix  str "/clj",  func(cljText){
+				jQuery("#clj")->html(cljText)
+			})
+		}
 
-		jQuery->ajax(jsObj(
-			"type",    "PUT",
-			"url",     str("/", hash, "/fgo"),
-			"data",    fgoText,
-			"success", func(){
-				jQuery->get(str("/", hash, "/clj"), func(cljText){
-					jQuery("#clj")->html(cljText)
-				})
-			},
-		))
-		
+		jQuery(js.document)->ajaxError(func(){
+			ajaxPut(prefix  str  "/fgo", fgoText, getClj)
+		})
+
+		getClj()
 	}
-
 })
+
