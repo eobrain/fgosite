@@ -44,8 +44,10 @@ func ajaxGet(url, resultIs) {
 }
 
 jQuery(func(){
-	const insertHere = js.document->getElementById("insert-here")
-	insertHere->_innerHTML  mutateSet  myTemplate()
+	const(
+		insertHere = jQuery("#insert-here")
+	)
+	insertHere->html(myTemplate())
 	{
 		const(
 			fgoText = jQuery("#fgo")->text()

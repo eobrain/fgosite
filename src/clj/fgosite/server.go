@@ -10,6 +10,14 @@ import (
 // Map of Funcgo, indexed by ID
 const fgoResult = ref({})
 
+func parse(fgoStr) {
+	try {
+		fgo.Parse("main.go", fgoStr)
+	} catch Exception e {
+		e
+	}
+}
+
 compojure.defroutes(app,
 	compojure.GET("/",      [], io.resource("public/index.html")),
 	compojure.PUT("/:id/fgo", request, dosync({
@@ -20,7 +28,7 @@ compojure.defroutes(app,
 		println(id, bodyStr)
 		alter(fgoResult, 
 			func(rs){
-				rs += { id: fgo.Parse("main.go", bodyStr) }
+				rs += { id: parse(bodyStr) }
 			}
 		)
 	})),
