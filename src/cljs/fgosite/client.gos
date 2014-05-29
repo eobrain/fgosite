@@ -18,7 +18,7 @@ func main() {
     fmt.Println("Hello, 世界")
 }`
 			],
-			[TEXTAREA#CLJ.FORM_CONTROL.COL_MD_6, {ROWS: 10},
+			[PRE#CLJ.COL_MD_6,
 				"Clojure code goes here"
 			]
 		],
@@ -39,8 +39,31 @@ func ajaxPut(url, data, success) {
 	))
 }
 
-func ajaxGet(url, resultIs) {
-	jQuery->get(url, resultIs)
+func ajaxGet(url, success, error) {
+	jQuery->ajax(jsObj(
+		"url",     url,
+		"success", success,
+		"error",    error
+	))
+}
+
+func core(fgoElem, cljElem) {
+	func getClj() {
+		const(
+			fgoText = fgoElem->val()
+			prefix  = "/"  str  js.md5(fgoText)
+		)
+		ajaxGet(
+			prefix  str "/clj",
+			func{cljElem->html($1)},
+			func(){
+				ajaxPut(prefix  str  "/fgo", fgoText, getClj)
+			}
+		)
+	}
+
+	fgoElem->keyup(getClj)
+	getClj()
 }
 
 jQuery(func(){
@@ -48,22 +71,6 @@ jQuery(func(){
 		insertHere = jQuery("#insert-here")
 	)
 	insertHere->html(myTemplate())
-	{
-		const(
-			fgoText = jQuery("#fgo")->text()
-			prefix  = "/"  str  js.md5(fgoText)
-		)
-		func getClj() {
-			ajaxGet(prefix  str "/clj",  func(cljText){
-				jQuery("#clj")->html(cljText)
-			})
-		}
-
-		jQuery(js.document)->ajaxError(func(){
-			ajaxPut(prefix  str  "/fgo", fgoText, getClj)
-		})
-
-		getClj()
-	}
+	core(jQuery("#fgo"), jQuery("#clj"))
 })
 
