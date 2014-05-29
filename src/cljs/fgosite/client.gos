@@ -27,6 +27,9 @@ func main() {
 			]
 		],
 		[DIV.ROW,
+			[DIV#ERR.ALERT.ALERT_WARNING]
+		],
+		[DIV.ROW,
 			[DIV.COL_MD_12,
 				[TEXTAREA.FORM_CONTROL, {ROWS: 10},
 					"Output goes here"
@@ -35,6 +38,7 @@ func main() {
 		]
 	]
 }
+
 
 func ajaxPut(url, data, success) {
 	jQuery->ajax(jsObj(
@@ -53,7 +57,11 @@ func ajaxGet(url, success, error) {
 	))
 }
 
-func core(fgoElem, cljElem) {
+func startsWith(string, prefix) {
+	string->lastIndexOf(prefix, 0) == 0
+}
+
+func core(fgoElem, cljElem, errElem) {
 	func getClj() {
 		const(
 			fgoText = fgoElem->val()
@@ -61,7 +69,16 @@ func core(fgoElem, cljElem) {
 		)
 		ajaxGet(
 			prefix  str "/clj",
-			func{cljElem->html($1)},
+			func(cljText){
+				if cljText startsWith "Parse error" {
+					errElem->html(cljText)
+					errElem->slideDown()
+				} else {
+					cljElem->html(cljText)
+					errElem->slideUp()
+					errElem->html("")
+				}
+			},
 			func(){
 				ajaxPut(prefix  str  "/fgo", fgoText, getClj)
 			}
@@ -77,6 +94,6 @@ jQuery(func(){
 		insertHere = jQuery("#insert-here")
 	)
 	insertHere->html(myTemplate())
-	core(jQuery("#fgo"), jQuery("#clj"))
+	core(jQuery("#fgo"), jQuery("#clj"), jQuery("#err"))
 })
 
