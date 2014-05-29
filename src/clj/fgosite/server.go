@@ -4,7 +4,7 @@ import (
 	"ring/adapter/jetty"
 	"compojure/route"
 	compojure "compojure/core"
-        fgo "funcgo/core"
+        fgo "funcgo/main"
 )
 
 // Map of Funcgo, indexed by ID
@@ -12,9 +12,9 @@ const fgoResult = ref({})
 
 func parse(fgoStr) {
 	try {
-		fgo.Parse("main.go", fgoStr)
+		fgo.CompileString("main.go", fgoStr)
 	} catch Exception e {
-		e
+		str(e->getMessage())
 	}
 }
 
@@ -25,7 +25,6 @@ compojure.defroutes(app,
 			{{id: ID}: ROUTE_PARAMS, body: BODY} = request
 			bodyStr = slurp(io.reader(body))
 		)
-		println(id, bodyStr)
 		alter(fgoResult, 
 			func(rs){
 				rs += { id: parse(bodyStr) }
