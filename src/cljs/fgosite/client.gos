@@ -17,8 +17,12 @@ func<hiccups.defhtml> pageTemplate(index) {
 		],
 		[DIV.ROW, [DIV.COL_MD_12,
 			[UL.PAGER,
-				[LI.PREVIOUS, [A#PREV, {HREF: "#"}, "&larr; Previous"]],
-				[LI.NEXT,     [A#NEXT, {HREF: "#"}, "Next &rarr;"]]
+				if 0 < index {
+					[LI.PREVIOUS, [A#PREV, {HREF: "#"}, "&larr; Previous"]]
+				},
+				if index < count(code.Tour) - 1 {
+					[LI.NEXT,     [A#NEXT, {HREF: "#"}, "Next &rarr;"]]
+				}
 			]
 		]],
 		[DIV.ROW,
