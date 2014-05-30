@@ -1,17 +1,44 @@
 // -*- mode: go -*-
 package code
 
+
+type page struct {num; fgo; description}
+
+
 var Tour = [
 
-	[1, `package main
+	new page(1, `package main
 
 import "fmt"
 
 func main() {
     fmt.Println("Hello, 世界")
-}`],
+}`,
 
-	[3, `package main
+
+			[DIV.COL_MD_4,
+
+				[H1, "A Tour of Functional Go"],
+				
+				[P, "Functional Go is a sugar coating
+				of Go syntax around a creamy
+				Clojure/JVM/JavaScript center"],
+
+				[P, "See ", [A, {HREF:
+				"https://github.com/eobrain/funcgo#funcgo"},
+				"Github page"], " for how to get
+				started using the language."] 
+
+			]
+
+
+),
+
+
+
+
+
+	new page(3, `package main
 
 import (
     "fmt"
@@ -30,6 +57,19 @@ func main() {
 
     fmt.Println("Or access the network:")
     fmt.Println(net.Dial("tcp", "google.com"))
-}`]
+}`,
+		
+		[DIV.COL_MD_4,
+
+			[H1, "XXX XXX"],
+
+			[P, "blah blah"],
+
+			[P, "blah."]
+
+		]
+
+
+)
 
 ]
