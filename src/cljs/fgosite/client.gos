@@ -2,22 +2,19 @@
 package client
 
 import macros hiccups   "hiccups/core"
+import(
+        _ "hiccups/runtime"
+	"fgosite/code"
+)
 
 const jQuery = \`js/jQuery`
-
 
 func<hiccups.defhtml> myTemplate() {
 	[DIV.CONTAINER,
 		[DIV.ROW,
 			[DIV.COL_MD_4,
 				[TEXTAREA#FGO.FORM_CONTROL, {ROWS: 10},
-					`package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, 世界")
-}`
+					code.Tour[0][1]
 				]
 			],
 			[DIV.COL_MD_4,
