@@ -12,6 +12,12 @@ const jQuery = \`js/jQuery`
 func<hiccups.defhtml> pageTemplate(index) {
 	const pg = code.Tour[index]
 	[DIV.CONTAINER,
+		[DIV.ROW, [DIV.COL_MD_12,
+			[UL.PAGER,
+				[LI.PREVIOUS, [A#PREV, {HREF: "#"}, "&larr; Previous"]],
+				[LI.NEXT,     [A#NEXT, {HREF: "#"}, "Next &rarr;"]]
+			]
+		]],
 		[DIV.ROW,
 			[DIV.COL_MD_4,
 				[TEXTAREA#FGO.FORM_CONTROL, {ROWS: 10},	FGO(pg)]
@@ -19,7 +25,7 @@ func<hiccups.defhtml> pageTemplate(index) {
 			[DIV.COL_MD_4, [PRE#CLJ]],
 			DESCRIPTION(pg)
 		],
-		[DIV.ROW, [DIV#ERR.ALERT.ALERT_WARNING]]
+		[DIV.ROW, [DIV#ERR.COL_MD_12.ALERT.ALERT_WARNING]]
 	]
 }
 
@@ -45,7 +51,7 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
-func core(fgoElem, cljElem, errElem) {
+func core(index, fgoElem, cljElem, errElem, prevElem, nextElem) {
 	func getClj() {
 		const(
 			fgoText = fgoElem->val()
@@ -70,14 +76,20 @@ func core(fgoElem, cljElem, errElem) {
 	}
 
 	fgoElem->keyup(getClj)
+	prevElem->click(func{main(index - 1)})
+	nextElem->click(func{main(index + 1)})
 	getClj()
 }
 
-jQuery(func(){
+func main(index) {
 	const(
 		insertHere = jQuery("#insert-here")
 	)
-	insertHere->html(pageTemplate(0))
-	core(jQuery("#fgo"), jQuery("#clj"), jQuery("#err"))
+	insertHere->html(pageTemplate(index))
+	core(index, jQuery("#fgo"), jQuery("#clj"), jQuery("#err"), jQuery("#prev"), jQuery("#next"))
+}
+
+jQuery(func(){
+	main(0)
 })
 
