@@ -12,6 +12,9 @@ const jQuery = \`js/jQuery`
 func<hiccups.defhtml> pageTemplate(index) {
 	const pg = code.Tour[index]
 	[DIV.CONTAINER,
+		[DIV.PAGE_HEADER,
+			[H1, "Functional Go ", [SMALL, "Clojure for the rest of us"]]
+		],
 		[DIV.ROW, [DIV.COL_MD_12,
 			[UL.PAGER,
 				[LI.PREVIOUS, [A#PREV, {HREF: "#"}, "&larr; Previous"]],
