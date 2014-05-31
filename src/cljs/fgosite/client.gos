@@ -45,6 +45,9 @@ func<hiccups.defhtml> pageTemplate(index) {
 				[LI.ACTIVE, [A#JVM, {HREF: "#"}, "JVM"]],
 				[LI,        [A#JS,  {HREF: "#"}, "JavaScript"]]
 			]
+		]],
+		[DIV.ROW, [DIV.COL_MD_12,
+			[PRE#OUT]
 		]]
 	]
  }
@@ -71,17 +74,24 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
+func evalClj(cljText) {
+	//try {
+		const main = loadString(cljText)
+		withOutStr(main())
+	//} catch js.Exception e {
+	//	str(e->getMessage())
+	//}
+}
+
 func core(index) {
 	func getClj() {
 		const(
 			fgoText = jQ("#fgo")->val()
-			filename = if jQ("#jvm")->parent()->hasClass("active") {
-				"main.go"
-			} else {
-				"main.gos"
-			}
+			isJvm = jQ("#jvm")->parent()->hasClass("active")
+			filename = if isJvm {"main.go"} else {"main.gos"}
 			prefix  = "/"  str  js.md5(filename  str  fgoText)
 		)
+		jQ("#out")->html("")
 		ajaxGet(
 			prefix  str "/clj",
 			func(cljText){
@@ -92,6 +102,15 @@ func core(index) {
 					jQ("#clj")->html(cljText)
 					jQ("#err")->slideUp()
 					jQ("#err")->html("")
+					if isJvm {
+						ajaxGet(
+							prefix  str "/eval",
+							func{ jQ("#out")->html($1) },
+							func{ jQ("#out")->html("EVAL FAILED") }
+						)
+					} else {
+						jQ("#out")->html(evalClj(cljText))
+					}
 				}
 			},
 			func(){
@@ -101,15 +120,16 @@ func core(index) {
 	}
 
 	jQ("#fgo")->keyup(getClj)
-	jQ("#prev")->click(func{main(index - 1)})
-	jQ("#next")->click(func{main(index + 1)})
+	jQ("#prev")->click(func{useTemplate(index - 1)})
+	jQ("#next")->click(func{useTemplate(index + 1)})
 	getClj()
 }
 
-func main(index) {
+func useTemplate(index) {
 	jQ("#insert-here")->html(pageTemplate(index))
 	core(index)
 	jQ("#jvm")->click(func(){
+		
 		jQ("#jvm")->parent()->addClass("active")
 		jQ("#js")->parent()->removeClass("active")
 		core(index)
@@ -122,6 +142,6 @@ func main(index) {
 }
 
 jQ(func(){
-	main(0)
+	useTemplate(0)
 })
 

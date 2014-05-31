@@ -9,6 +9,9 @@ import (
 
 // Map of Funcgo, indexed by ID
 const fgoResult = ref({})
+func clj(id) {
+	(*fgoResult)(id)
+}
 
 func parse(filename, fgoStr) {
 	try {
@@ -17,6 +20,7 @@ func parse(filename, fgoStr) {
 		str(e->getMessage())
 	}
 }
+
 
 compojure.defroutes(app,
 	compojure.GET("/",      [], io.resource("public/index.html")),
@@ -31,7 +35,15 @@ compojure.defroutes(app,
 			}
 		)
 	})),
-	compojure.GET("/:id/clj", [id], (*fgoResult)(id)),
+	compojure.GET("/:id/clj", [id], clj(id)),
+	compojure.GET("/:id/eval", [id], {
+		try{
+			const main = loadString(clj(id))
+			withOutStr(main())
+		} catch Exception e {
+			str(e->getMessage())
+		}
+	}),
 	route.resources("/"),
 	route.notFound("<h1>Page not found</h1>")
 )

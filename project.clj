@@ -3,6 +3,7 @@
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.eamonn.funcgo/funcgo-lein-plugin "0.2.3-SNAPSHOT"]
+                 [org.eamonn.funcgo/fgolib "0.2.1-SNAPSHOT"]
                  [org.clojure/clojurescript "0.0-2156"]
                  [ring "1.2.1"]
                  [compojure "1.1.8"]
