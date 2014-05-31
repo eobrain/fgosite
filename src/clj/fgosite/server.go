@@ -10,9 +10,9 @@ import (
 // Map of Funcgo, indexed by ID
 const fgoResult = ref({})
 
-func parse(fgoStr) {
+func parse(filename, fgoStr) {
 	try {
-		fgo.CompileString("main.go", fgoStr)
+		fgo.CompileString(filename, fgoStr)
 	} catch Exception e {
 		str(e->getMessage())
 	}
@@ -20,14 +20,14 @@ func parse(fgoStr) {
 
 compojure.defroutes(app,
 	compojure.GET("/",      [], io.resource("public/index.html")),
-	compojure.PUT("/:id/fgo", request, dosync({
+	compojure.PUT("/:id/fgo/:filename", request, dosync({
 		const(
-			{{id: ID}: ROUTE_PARAMS, body: BODY} = request
+			{{id: ID, filename: FILENAME}: ROUTE_PARAMS, body: BODY} = request
 			bodyStr = slurp(io.reader(body))
 		)
 		alter(fgoResult, 
 			func(rs){
-				rs += { id: parse(bodyStr) }
+				rs += { id: parse(filename, bodyStr) }
 			}
 		)
 	})),

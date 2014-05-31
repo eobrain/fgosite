@@ -7,7 +7,7 @@ import(
 	"fgosite/code"
 )
 
-const jQuery = \`js/jQuery`
+const jQ = \`js/jQuery`
 
 func<hiccups.defhtml> pageTemplate(index) {
 	const pg = code.Tour[index]
@@ -39,13 +39,19 @@ func<hiccups.defhtml> pageTemplate(index) {
 		"http://tour.golang.org/#" str NUM(pg)},
 		"corresponding Go code"], " on a Tour of Go"]
 
+		]],
+		[DIV.ROW, [DIV.COL_MD_12,
+			[UL.NAV.NAV_PILLS.NAV_JUSTIFIED,
+				[LI.ACTIVE, [A#JVM, {HREF: "#"}, "JVM"]],
+				[LI,        [A#JS,  {HREF: "#"}, "JavaScript"]]
+			]
 		]]
 	]
  }
 
 
 func ajaxPut(url, data, success) {
-	jQuery->ajax(jsObj(
+	jQ->ajax(jsObj(
 		"type",    "PUT",
 		"url",     url,
 		"data",    data,
@@ -54,7 +60,7 @@ func ajaxPut(url, data, success) {
 }
 
 func ajaxGet(url, success, error) {
-	jQuery->ajax(jsObj(
+	jQ->ajax(jsObj(
 		"url",     url,
 		"success", success,
 		"error",    error
@@ -65,45 +71,57 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
-func core(index, fgoElem, cljElem, errElem, prevElem, nextElem) {
+func core(index) {
 	func getClj() {
 		const(
-			fgoText = fgoElem->val()
-			prefix  = "/"  str  js.md5(fgoText)
+			fgoText = jQ("#fgo")->val()
+			filename = if jQ("#jvm")->parent()->hasClass("active") {
+				"main.go"
+			} else {
+				"main.gos"
+			}
+			prefix  = "/"  str  js.md5(filename  str  fgoText)
 		)
 		ajaxGet(
 			prefix  str "/clj",
 			func(cljText){
 				if cljText startsWith "Parse error" {
-					errElem->html(cljText)
-					errElem->slideDown()
+					jQ("#err")->html(cljText)
+					jQ("#err")->slideDown()
 				} else {
-					cljElem->html(cljText)
-					errElem->slideUp()
-					errElem->html("")
+					jQ("#clj")->html(cljText)
+					jQ("#err")->slideUp()
+					jQ("#err")->html("")
 				}
 			},
 			func(){
-				ajaxPut(prefix  str  "/fgo", fgoText, getClj)
+				ajaxPut(str(prefix, "/fgo/", filename), fgoText, getClj)
 			}
 		)
 	}
 
-	fgoElem->keyup(getClj)
-	prevElem->click(func{main(index - 1)})
-	nextElem->click(func{main(index + 1)})
+	jQ("#fgo")->keyup(getClj)
+	jQ("#prev")->click(func{main(index - 1)})
+	jQ("#next")->click(func{main(index + 1)})
 	getClj()
 }
 
 func main(index) {
-	const(
-		insertHere = jQuery("#insert-here")
-	)
-	insertHere->html(pageTemplate(index))
-	core(index, jQuery("#fgo"), jQuery("#clj"), jQuery("#err"), jQuery("#prev"), jQuery("#next"))
+	jQ("#insert-here")->html(pageTemplate(index))
+	core(index)
+	jQ("#jvm")->click(func(){
+		jQ("#jvm")->parent()->addClass("active")
+		jQ("#js")->parent()->removeClass("active")
+		core(index)
+	})
+	jQ("#js")->click(func(){
+		jQ("#jvm")->parent()->removeClass("active")
+		jQ("#js")->parent()->addClass("active")
+		core(index)
+	})
 }
 
-jQuery(func(){
+jQ(func(){
 	main(0)
 })
 
