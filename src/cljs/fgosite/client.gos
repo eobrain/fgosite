@@ -32,9 +32,16 @@ func<hiccups.defhtml> pageTemplate(index) {
 			[DIV.COL_MD_4, [PRE#CLJ]],
 			DESCRIPTION(pg)
 		],
-		[DIV.ROW, [DIV#ERR.COL_MD_12.ALERT.ALERT_WARNING]]
+		[DIV.ROW, [DIV#ERR.COL_MD_12.ALERT.ALERT_WARNING]],
+		[DIV.ROW, [DIV#ERR.COL_MD_12,
+
+			[P, "Compare to ", [A, {HREF:
+		"http://tour.golang.org/#" str NUM(pg)},
+		"corresponding Go code"], " on a Tour of Go"]
+
+		]]
 	]
-}
+ }
 
 
 func ajaxPut(url, data, success) {

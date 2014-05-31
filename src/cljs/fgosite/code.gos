@@ -6,7 +6,7 @@ type page struct {num; fgo; description}
 
 
 var Tour = [
-
+	
 	new page(1, `package main
 
 import "fmt"
@@ -14,22 +14,41 @@ import "fmt"
 func main() {
     fmt.Println("Hello, 世界")
 }`,
-
-
-			[DIV.COL_MD_4,
-
-				[H1, "A Tour of Functional Go"],
-				
-				[P, "Functional Go is a sugar coating
+		
+		
+		[DIV.COL_MD_4,
+			
+			[H1, "A Tour of Functional Go"],
+			
+			[P, "Functional Go is a sugar coating
 				of Go syntax around a creamy
 				Clojure/JVM/JavaScript center"],
-
-				[P, "See ", [A, {HREF:
+			
+			[P, "See ", [A, {HREF:
 				"https://github.com/eobrain/funcgo#funcgo"},
 				"Github page"], " for how to get
-				started using the language."] 
+				started using the language."],
 
-			]
+			[P, "This tour is inspired by, and reuses many
+			of the code examples and some text from, ",
+			[A, {HREF: "http://tour.golang.org"}, `"A Tour
+			of Go"`], ".  You can follow the links under
+			the code here to compare our Functional Go
+			code with the corresponding Go code."],
+			
+			[P, "The tour is interactive. Feel free to
+			modify the Functional Go code to immediately
+			see how the generated Clojure code changes."],
+
+			[P, "These example programs demonstrate
+			different aspects of Go. The programs in the
+			tour are meant to be starting points for your
+			own experimentation."],
+
+			[P, `When you're ready to move on, Click the
+			"Next" button on the top of the page.`]
+
+		]
 
 
 ),
@@ -61,11 +80,12 @@ func main() {
 		
 		[DIV.COL_MD_4,
 
-			[H1, "XXX XXX"],
-
-			[P, "blah blah"],
-
-			[P, "blah."]
+			[H1, "How this Tour was built."],
+			
+			[P, "This tour is built using Functional Go,
+			including a server component running on Google
+			App Engine and a client component that is
+			compiled to JavaScript"]
 
 		]
 
