@@ -17,7 +17,7 @@ func parse(filename, fgoStr) {
 	try {
 		fgo.CompileString(filename, fgoStr)
 	} catch Exception e {
-		str(e->getMessage())
+		str("ERROR in fgo compiling:\n", e->getMessage())
 	}
 }
 

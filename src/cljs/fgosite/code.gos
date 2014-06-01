@@ -4,7 +4,6 @@ package code
 
 type page struct {num; fgo; description}
 
-
 var Tour = [
 	
 	new page(1, `package main
@@ -53,10 +52,6 @@ func main() {
 
 ),
 
-
-
-
-
 	new page(3, `package main
 
 import (
@@ -88,8 +83,38 @@ func main() {
 			compiled to JavaScript"]
 
 		]
+	),
 
+	new page(4, `package main
 
+import (
+    "fmt"
+    "math/rand"
 )
 
+func main() {
+    fmt.Println("My favorite number is", rand.Intn(10))
+}`,
+
+		[DIV.COL_MD_4,
+
+			[H1, "Packages"],
+			
+			[P, `Every Go program is made up of packages.`],
+
+			[P, `Programs start running in package main.`],
+
+			[P, `This program is using the packages with
+			import paths "fmt" and "math/rand".`],
+
+			[P, `By convention, the package name is the
+			same as the last element of the import
+			path. For instance, the "math/rand" package
+			comprises files that begin with the statement
+			package rand.`]
+
+		]
+	)		
+
 ]
+

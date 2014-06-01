@@ -74,15 +74,6 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
-func evalClj(cljText) {
-	//try {
-		const main = loadString(cljText)
-		withOutStr(main())
-	//} catch js.Exception e {
-	//	str(e->getMessage())
-	//}
-}
-
 func core(index) {
 	func getClj() {
 		const(
@@ -95,13 +86,16 @@ func core(index) {
 		ajaxGet(
 			prefix  str "/clj",
 			func(cljText){
-				if cljText startsWith "Parse error" {
+				// js.console->log("cljText=", cljText)
+				println("cljText=", cljText)
+				if cljText startsWith "ERROR " {
 					jQ("#err")->html(cljText)
 					jQ("#err")->slideDown()
 				} else {
 					jQ("#clj")->html(cljText)
 					jQ("#err")->slideUp()
 					jQ("#err")->html("")
+					jQ("#out")->slideDown()
 					if isJvm {
 						ajaxGet(
 							prefix  str "/eval",
@@ -109,7 +103,7 @@ func core(index) {
 							func{ jQ("#out")->html("EVAL FAILED") }
 						)
 					} else {
-						jQ("#out")->html(evalClj(cljText))
+						jQ("#out")->slideUp()
 					}
 				}
 			},
@@ -145,3 +139,4 @@ jQ(func(){
 	useTemplate(0)
 })
 
+mutateEnableConsolePrint()
