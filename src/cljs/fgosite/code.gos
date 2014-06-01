@@ -4,55 +4,58 @@ package code
 
 type page struct {num; fgo; description}
 
+func newPage(num, fgo, header, paras...) {
+	new page(
+		num,
+		fgo,
+		[DIV.COL_MD_4, [H1, header]]  concat  paras
+	)
+}
+
 var Tour = [
 	
-	new page(1, `package main
+	newPage(
+		1,
+		`package main
 
 import "fmt"
 
 func main() {
     fmt.Println("Hello, 世界")
 }`,
-		
-		
-		[DIV.COL_MD_4,
+		"A Tour of Functional Go",
 			
-			[H1, "A Tour of Functional Go"],
+		[P, "Functional Go is a sugar coating of Go syntax
+		around a creamy Clojure/JVM/JavaScript center"],
 			
-			[P, "Functional Go is a sugar coating
-				of Go syntax around a creamy
-				Clojure/JVM/JavaScript center"],
-			
-			[P, "See ", [A, {HREF:
-				"https://github.com/eobrain/funcgo#funcgo"},
-				"Github page"], " for how to get
-				started using the language."],
+		[P, "See ", [A, {HREF:
+		"https://github.com/eobrain/funcgo#funcgo"}, "Github
+		page"], " for how to get started using the
+		language."],
 
-			[P, "This tour is inspired by, and reuses many
-			of the code examples and some text from, ",
-			[A, {HREF: "http://tour.golang.org"}, `"A Tour
-			of Go"`], ".  You can follow the links under
-			the code here to compare our Functional Go
-			code with the corresponding Go code."],
-			
-			[P, "The tour is interactive. Feel free to
-			modify the Functional Go code to immediately
-			see how the generated Clojure code changes."],
+		[P, "This tour is inspired by, and reuses many of the
+		code examples and some text from, ", [A, {HREF:
+		"http://tour.golang.org"}, `"A Tour of Go"`], ".  You
+		can follow the links under the code here to compare
+		our Functional Go code with the corresponding Go
+		code."],
 
-			[P, "These example programs demonstrate
-			different aspects of Go. The programs in the
-			tour are meant to be starting points for your
-			own experimentation."],
+		[P, "The tour is interactive. Feel free to modify the
+		Functional Go code to immediately see how the
+		generated Clojure code changes."],
 
-			[P, `When you're ready to move on, Click the
-			"Next" button on the top of the page.`]
+		[P, "These example programs demonstrate different
+		aspects of Go. The programs in the tour are meant to
+		be starting points for your own experimentation."],
 
-		]
+		[P, `When you're ready to move on, Click the "Next"
+		button on the top of the page.`]
 
+	),
 
-),
-
-	new page(3, `package main
+	newPage(
+		3,
+		`package main
 
 import (
     "fmt"
@@ -73,19 +76,17 @@ func main() {
     fmt.Println(net.Dial("tcp", "google.com"))
 }`,
 		
-		[DIV.COL_MD_4,
-
-			[H1, "How this Tour was built."],
+		"How this Tour was built.",
 			
-			[P, "This tour is built using Functional Go,
-			including a server component running on Google
-			App Engine and a client component that is
-			compiled to JavaScript"]
+		[P, "This tour is built using Functional Go, including
+		a server component running on Google App Engine and a
+		client component that is compiled to JavaScript"]
 
-		]
 	),
 
-	new page(4, `package main
+	newPage(
+		4,
+		`package main
 
 import (
     "fmt"
@@ -96,25 +97,38 @@ func main() {
     fmt.Println("My favorite number is", rand.Intn(10))
 }`,
 
-		[DIV.COL_MD_4,
-
-			[H1, "Packages"],
+		"Packages",
 			
-			[P, `Every Go program is made up of packages.`],
+		[P, `Every Go program is made up of packages.`],
 
-			[P, `Programs start running in package main.`],
+		[P, `Programs start running in package main.`],
 
-			[P, `This program is using the packages with
-			import paths "fmt" and "math/rand".`],
+		[P, `This program is using the packages with import
+		paths "fmt" and "math/rand".`],
 
-			[P, `By convention, the package name is the
-			same as the last element of the import
-			path. For instance, the "math/rand" package
-			comprises files that begin with the statement
-			package rand.`]
+		[P, `By convention, the package name is the same as
+		the last element of the import path. For instance, the
+		"math/rand" package comprises files that begin with
+		the statement package rand.`]
+	),
 
-		]
-	)		
+	newPage(
+		15,
+		`package main
 
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    var x, y int = 3, 4
+    var f float64 = math.Sqrt(float64(3*3 + 4*4))
+    var z int = int(f)
+    fmt.Println(x, y, z)
+}`,
+
+		"Type conversions"
+	)
 ]
 
