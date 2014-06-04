@@ -1,0 +1,10 @@
+#!/bin/bash -x
+
+SDK=$HOME/installations/appengine-java-sdk-1.9.2
+
+lein do  clean,  fgoc -f,  cljsbuild once,  ring uberwar
+
+war=`ls -tr target/*-standalone.war | tail -1`
+unzip $war -d /tmp/open-war-$$
+
+$SDK/bin/appcfg.sh --oauth2 update /tmp/open-war-$$

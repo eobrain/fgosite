@@ -1,7 +1,7 @@
 package server
 import (
 	"clojure/java/io"
-	"ring/adapter/jetty"
+	//"ring/adapter/jetty"
 	"compojure/route"
 	compojure "compojure/core"
         fgo "funcgo/main"
@@ -48,7 +48,9 @@ compojure.defroutes(app,
 	route.notFound("<h1>Page not found</h1>")
 )
 
-func _main(args...) {
-	app  jetty.runJetty  {PORT: 3000}
-}
+var App = app
+
+//func _main(args...) {
+//	app  jetty.runJetty  {PORT: 3000}
+//}
 

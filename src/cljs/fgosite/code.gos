@@ -129,6 +129,65 @@ func main() {
 }`,
 
 		"Type conversions"
+	),
+
+	newPage(
+		16,
+		`package main
+
+import "fmt"
+
+const Pi = 3.14
+
+func main() {
+    const World = "世界"
+    fmt.Println("Hello", World)
+    fmt.Println("Happy", Pi, "Day")
+    {
+        const Truth = true
+        fmt.Println("Go rules?", Truth)
+    }
+}`,
+
+		"Constants",
+
+		[P, "In Funcgo, unlike in Go, the const declaration
+		must be at the beginning of its scope, which is why we
+		need the extra level of curly braces around the last
+		two statements here."]
+
+	),
+
+	newPage(
+		22,
+		`package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func sqrt(x float64) string {
+    if x < 0 {
+        sqrt(-x) + "i"
+    } else {
+        fmt.Sprint(math.Sqrt(x))
+    }
+}
+
+func main() {
+    fmt.Println(sqrt(2), sqrt(-4))
+}`,
+		"If",
+
+		[P,"The if statement looks as it does in C or Java,
+		except that the ( ) are gone and the { } are
+		required. "]
+
 	)
+
+
+
+
 ]
 
