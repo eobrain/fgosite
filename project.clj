@@ -7,10 +7,13 @@
                  [org.clojure/clojurescript "0.0-2156"]
                  [ring "1.2.1"]
                  [compojure "1.1.8"]
-                 [hiccups "0.3.0"]]
+                 [hiccups "0.3.0"]
+                 [midje "1.5.1" :scope "test"]]
+  :test-paths ["resources/public/tour_code"]
   :plugins [[org.eamonn.funcgo/funcgo-lein-plugin "0.2.4-APPENGINE"]
             [lein-cljsbuild "1.0.2"]
-            [lein-ring "0.8.10"]]
+            [lein-ring "0.8.10"]
+            [lein-midje "3.1.1"]]
   :source-paths ["src/clj"]
   :cljsbuild { 
     :builds {

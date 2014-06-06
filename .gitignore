@@ -4,5 +4,4 @@
 /src/**/*.clj
 /src/**/*.cljs
 /resources/**/*.clj
-
-
+/.lein-failures
