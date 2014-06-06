@@ -3,5 +3,6 @@
 *~
 /src/**/*.clj
 /src/**/*.cljs
+/resources/**/*.clj
 
 

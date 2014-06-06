@@ -27,7 +27,7 @@ func<hiccups.defhtml> pageTemplate(index) {
 		]],
 		[DIV.ROW,
 			[DIV.COL_MD_4,
-				[TEXTAREA#FGO.FORM_CONTROL, {ROWS: 10},	FGO(pg)]
+				[TEXTAREA#FGO.FORM_CONTROL, {ROWS: 10}]
 			],
 			[DIV.COL_MD_4, [PRE#CLJ]],
 			DESCRIPTION(pg)
@@ -74,17 +74,16 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
-func core(index) {
+func coreWithFgo(index, fgoText) {
 	func getClj() {
 		const(
-			fgoText = jQ("#fgo")->val()
 			isJvm = jQ("#jvm")->parent()->hasClass("active")
 			filename = if isJvm {"main.go"} else {"main.gos"}
 			prefix  = "/"  str  js.md5(filename  str  fgoText)
 		)
 		jQ("#out")->html("")
 		ajaxGet(
-			prefix  str "/clj",
+			prefix  str  "/clj",
 			func(cljText){
 				// js.console->log("cljText=", cljText)
 				println("cljText=", cljText)
@@ -113,17 +112,24 @@ func core(index) {
 		)
 	}
 
+	jQ("#fgo")->html(fgoText)
 	jQ("#fgo")->keyup(getClj)
 	jQ("#prev")->click(func{useTemplate(index - 1)})
 	jQ("#next")->click(func{useTemplate(index + 1)})
 	getClj()
 }
 
+func core(index) {
+	ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"),
+		func{ coreWithFgo(index, $1) },
+		func{ coreWithFgo(index, "(((Insert Code Here)))") }
+	)
+}
+
 func useTemplate(index) {
 	jQ("#insert-here")->html(pageTemplate(index))
 	core(index)
 	jQ("#jvm")->click(func(){
-		
 		jQ("#jvm")->parent()->addClass("active")
 		jQ("#js")->parent()->removeClass("active")
 		core(index)

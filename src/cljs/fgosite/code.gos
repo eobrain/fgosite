@@ -2,28 +2,18 @@
 package code
 
 
-type page struct {num; fgo; description}
+type page struct {num; description}
 
-func newPage(num, fgo, header, paras...) {
+func newPage(num, header, paras...) {
 	new page(
 		num,
-		fgo,
 		[DIV.COL_MD_4, [H1, header]]  concat  paras
 	)
 }
 
 var Tour = [
 	
-	newPage(
-		1,
-		`package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, 世界")
-}`,
-		"A Tour of Functional Go",
+	newPage(1, "A Tour of Functional Go",
 			
 		[P, "Functional Go is a sugar coating of Go syntax
 		around a creamy Clojure/JVM/JavaScript center"],
@@ -53,30 +43,7 @@ func main() {
 
 	),
 
-	newPage(
-		3,
-		`package main
-
-import (
-    "fmt"
-    "net"
-    "os"
-    "time"
-)
-
-func main() {
-    fmt.Println("Welcome to the playground!")
-
-    fmt.Println("The time is", time.Now())
-
-    fmt.Println("And if you try to open a file:")
-    fmt.Println(os.Open("filename"))
-
-    fmt.Println("Or access the network:")
-    fmt.Println(net.Dial("tcp", "google.com"))
-}`,
-		
-		"How this Tour was built.",
+	newPage(3, "How this Tour was built.",
 			
 		[P, "This tour is built using Functional Go, including
 		a server component running on Google App Engine and a
@@ -84,20 +51,7 @@ func main() {
 
 	),
 
-	newPage(
-		4,
-		`package main
-
-import (
-    "fmt"
-    "math/rand"
-)
-
-func main() {
-    fmt.Println("My favorite number is", rand.Intn(10))
-}`,
-
-		"Packages",
+	newPage(4, "Packages",
 			
 		[P, `Every Go program is made up of packages.`],
 
@@ -112,44 +66,9 @@ func main() {
 		the statement package rand.`]
 	),
 
-	newPage(
-		15,
-		`package main
+	newPage(15, "Type conversions"),
 
-import (
-    "fmt"
-    "math"
-)
-
-func main() {
-    var x, y int = 3, 4
-    var f float64 = math.Sqrt(float64(3*3 + 4*4))
-    var z int = int(f)
-    fmt.Println(x, y, z)
-}`,
-
-		"Type conversions"
-	),
-
-	newPage(
-		16,
-		`package main
-
-import "fmt"
-
-const Pi = 3.14
-
-func main() {
-    const World = "世界"
-    fmt.Println("Hello", World)
-    fmt.Println("Happy", Pi, "Day")
-    {
-        const Truth = true
-        fmt.Println("Go rules?", Truth)
-    }
-}`,
-
-		"Constants",
+	newPage(16, "Constants",
 
 		[P, "In Funcgo, unlike in Go, the const declaration
 		must be at the beginning of its scope, which is why we
@@ -158,36 +77,19 @@ func main() {
 
 	),
 
-	newPage(
-		22,
-		`package main
-
-import (
-    "fmt"
-    "math"
-)
-
-func sqrt(x float64) string {
-    if x < 0 {
-        sqrt(-x) + "i"
-    } else {
-        fmt.Sprint(math.Sqrt(x))
-    }
-}
-
-func main() {
-    fmt.Println(sqrt(2), sqrt(-4))
-}`,
-		"If",
+	newPage(22, "If",
 
 		[P,"The if statement looks as it does in C or Java,
 		except that the ( ) are gone and the { } are
 		required. "]
 
-	)
+	),
 
-
-
-
+	newPage(23, "23"),
+	newPage(25, "25"),
+	newPage(26, "26"),
+	newPage(31, "31"),
+	newPage(40, "40"),
+	newPage(47, "47")
 ]
 
