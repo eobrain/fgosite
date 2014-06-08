@@ -90,6 +90,6 @@ var Tour = [
 	newPage(26, "26"),
 	newPage(31, "31"),
 	newPage(40, "40"),
-	newPage(47, "47")
+	newPage(47, "47"),
+	newPage(65, "65")
 ]
-

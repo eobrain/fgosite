@@ -15,7 +15,7 @@
             [lein-ring "0.8.10"]
             [lein-midje "3.1.1"]]
   :source-paths ["src/clj"]
-  :cljsbuild { 
+  :cljsbuild {
     :builds {
       :main {
              :source-paths ["src/cljs"]

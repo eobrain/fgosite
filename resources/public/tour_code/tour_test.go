@@ -58,4 +58,3 @@ test.fact("tour31", withOutStr(m31.main()), =>, `Hello World
 test.fact("tour40", withOutStr(m40.main()), =>, `map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
 `)
 test.fact("tour47", withOutStr(m47.main()), =>, `Go runs on clojure.`)
-
