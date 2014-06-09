@@ -12,9 +12,11 @@ const jQ = \`js/jQuery`
 func<hiccups.defhtml> pageTemplate(index) {
 	const pg = code.Tour[index]
 	[DIV.CONTAINER,
+		// Title at top of page
 		[DIV.PAGE_HEADER,
 			[H1, "Functional Go ", [SMALL, "Clojure for the rest of us"]]
 		],
+		// Back and Forward buttons to navigate through the tour
 		[DIV.ROW, [DIV.COL_MD_12,
 			[UL.PAGER,
 				if 0 < index {
@@ -26,13 +28,16 @@ func<hiccups.defhtml> pageTemplate(index) {
 			]
 		]],
 		[DIV.ROW,
-			[DIV.COL_MD_4,
+			// Main code area
+			[DIV.COL_MD_6,
 				[TEXTAREA#FGO.FORM_CONTROL, {ROWS: 10}]
 			],
-			[DIV.COL_MD_4, [PRE#CLJ]],
+			// Main description area (filled in from description in code.go)
 			DESCRIPTION(pg)
 		],
+		// Display any fgo compile errors.
 		[DIV.ROW, [DIV#ERR.COL_MD_12.ALERT.ALERT_WARNING]],
+		// Link to original Go tour.
 		[DIV.ROW, [DIV#ERR.COL_MD_12,
 
 			[P, "Compare to ", [A, {HREF:
@@ -40,14 +45,19 @@ func<hiccups.defhtml> pageTemplate(index) {
 		"corresponding Go code"], " on a Tour of Go"]
 
 		]],
-		[DIV.ROW, [DIV.COL_MD_12,
+		// Display generated Clojure, and result of evaluating it.
+		[DIV.ROW,
+			[DIV.COL_MD_6, [PRE#CLJ]],
+			[DIV.COL_MD_6,
+				[PRE#OUT]
+			]
+		],
+		// Control to toggle between Clojure and ClojureScript
+		[DIV.ROW, [DIV.COL_MD_6,
 			[UL.NAV.NAV_PILLS.NAV_JUSTIFIED,
 				[LI.ACTIVE, [A#JVM, {HREF: "#"}, "JVM"]],
 				[LI,        [A#JS,  {HREF: "#"}, "JavaScript"]]
 			]
-		]],
-		[DIV.ROW, [DIV.COL_MD_12,
-			[PRE#OUT]
 		]]
 	]
  }
@@ -74,6 +84,14 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
+func resizeFgo() {
+	const (
+		fgo = jQ("#fgo")
+		charCount = fgo->html()->_length
+	)
+	fgo->height(2 * charCount  min  jQ(js.window)->height() / 3)
+}
+
 func coreWithFgo(index, fgoText) {
 	func getClj() {
 		const(
@@ -81,6 +99,7 @@ func coreWithFgo(index, fgoText) {
 			filename = if isJvm {"main.go"} else {"main.gos"}
 			prefix  = "/"  str  js.md5(filename  str  fgoText)
 		)
+		resizeFgo()
 		jQ("#out")->html("")
 		ajaxGet(
 			prefix  str  "/clj",

@@ -7,17 +7,17 @@ type page struct {num; description}
 func newPage(num, header, paras...) {
 	new page(
 		num,
-		[DIV.COL_MD_4, [H1, header]]  concat  paras
+		vec([DIV.COL_MD_6, [H1, header]]  concat  paras)
 	)
 }
 
 var Tour = [
-	
+
 	newPage(1, "A Tour of Functional Go",
-			
+
 		[P, "Functional Go is a sugar coating of Go syntax
 		around a creamy Clojure/JVM/JavaScript center"],
-			
+
 		[P, "See ", [A, {HREF:
 		"https://github.com/eobrain/funcgo#funcgo"}, "Github
 		page"], " for how to get started using the
@@ -44,7 +44,7 @@ var Tour = [
 	),
 
 	newPage(3, "How this Tour was built.",
-			
+
 		[P, "This tour is built using Functional Go, including
 		a server component running on Google App Engine and a
 		client component that is compiled to JavaScript"]
@@ -52,7 +52,7 @@ var Tour = [
 	),
 
 	newPage(4, "Packages",
-			
+
 		[P, `Every Go program is made up of packages.`],
 
 		[P, `Programs start running in package main.`],

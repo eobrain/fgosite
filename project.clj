@@ -2,7 +2,7 @@
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.eamonn.funcgo/funcgo-lein-plugin "0.2.4-APPENGINE"]
+                 [org.eamonn.funcgo/funcgo-lein-plugin "0.2.4-SNAPSHOT"]
                  [org.eamonn.funcgo/fgolib "0.2.2-SNAPSHOT"]
                  [org.clojure/clojurescript "0.0-2156"]
                  [ring "1.2.1"]
@@ -10,7 +10,7 @@
                  [hiccups "0.3.0"]
                  [midje "1.5.1" :scope "test"]]
   :test-paths ["resources/public/tour_code"]
-  :plugins [[org.eamonn.funcgo/funcgo-lein-plugin "0.2.4-APPENGINE"]
+  :plugins [[org.eamonn.funcgo/funcgo-lein-plugin "0.2.4-SNAPSHOT"]
             [lein-cljsbuild "1.0.2"]
             [lein-ring "0.8.10"]
             [lein-midje "3.1.1"]]
@@ -25,4 +25,3 @@
         :jar true}}}
   :main fgosite.server
   :ring {:handler fgosite.server/app})
-
