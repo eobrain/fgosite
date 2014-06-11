@@ -92,50 +92,48 @@ func resizeFgo() {
 	fgo->height(2 * charCount  min  jQ(js.window)->height() / 3)
 }
 
-func coreWithFgo(index, fgoText) {
-	func getClj() {
-		const(
-			isJvm = jQ("#jvm")->parent()->hasClass("active")
-			filename = if isJvm {"main.go"} else {"main.gos"}
-			prefix  = "/"  str  js.md5(filename  str  fgoText)
-		)
-		resizeFgo()
-		jQ("#out")->html("")
-		ajaxGet(
-			prefix  str  "/clj",
-			func(cljText){
-				// js.console->log("cljText=", cljText)
-				println("cljText=", cljText)
-				if cljText startsWith "ERROR " {
-					jQ("#err")->html(cljText)
-					jQ("#err")->slideDown()
+func getClj(index, fgoText) {
+	const(
+		isJvm = jQ("#jvm")->parent()->hasClass("active")
+		filename = if isJvm {"main.go"} else {"main.gos"}
+		prefix  = "/"  str  js.md5(filename  str  fgoText)
+	)
+	resizeFgo()
+	jQ("#out")->html("")
+	ajaxGet(
+		prefix  str  "/clj",
+		func(cljText){
+			if cljText startsWith "ERROR " {
+				jQ("#err")->html(cljText)
+				jQ("#err")->slideDown()
+			} else {
+				jQ("#clj")->html(cljText)
+				jQ("#err")->slideUp()
+				jQ("#err")->html("")
+				jQ("#out")->slideDown()
+				if isJvm {
+					ajaxGet(
+						prefix  str "/eval",
+						func{ jQ("#out")->html($1) },
+						func{ jQ("#out")->html("EVAL FAILED") }
+					)
 				} else {
-					jQ("#clj")->html(cljText)
-					jQ("#err")->slideUp()
-					jQ("#err")->html("")
-					jQ("#out")->slideDown()
-					if isJvm {
-						ajaxGet(
-							prefix  str "/eval",
-							func{ jQ("#out")->html($1) },
-							func{ jQ("#out")->html("EVAL FAILED") }
-						)
-					} else {
-						jQ("#out")->slideUp()
-					}
+					jQ("#out")->slideUp()
 				}
-			},
-			func(){
-				ajaxPut(str(prefix, "/fgo/", filename), fgoText, getClj)
 			}
-		)
-	}
+		},
+		func(){
+			ajaxPut(str(prefix, "/fgo/", filename), fgoText, func{getClj(index, fgoText)})
+		}
+	)
+}
 
+func coreWithFgo(index, fgoText) {
 	jQ("#fgo")->html(fgoText)
-	jQ("#fgo")->keyup(getClj)
+	jQ("#fgo")->keyup(func{getClj(index, jQ("#fgo")->val())})
 	jQ("#prev")->click(func{useTemplate(index - 1)})
 	jQ("#next")->click(func{useTemplate(index + 1)})
-	getClj()
+	getClj(index, fgoText)
 }
 
 func core(index) {
@@ -164,4 +162,3 @@ jQ(func(){
 	useTemplate(0)
 })
 
-mutateEnableConsolePrint()
