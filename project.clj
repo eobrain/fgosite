@@ -9,7 +9,6 @@
                  [compojure "1.1.8"]
                  [hiccups "0.3.0"]
                  [midje "1.5.1" :scope "test"]]
-  :uberjar-name "fgosite-standalone.jar"
   :min-lein-version "2.0.0"
   :test-paths ["resources/public/tour_code"]
   :plugins [[org.eamonn.funcgo/funcgo-lein-plugin "0.2.5"]
