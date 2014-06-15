@@ -1,14 +1,17 @@
 // -*- mode: go -*-
 package client
 
-import macros hiccups   "hiccups/core"
+import macros hiccups	"hiccups/core"
 import(
-        _ "hiccups/runtime"
+	_ "hiccups/runtime"
 	"fgosite/code"
 )
 
+// This is the equivalent of the $ variable in JavaSccript JQuery
 const jQ = \`js/jQuery`
 
+// Use the Hiccups templating language to create HTML in the structure
+// that Bootstrap needs.
 func<hiccups.defhtml> pageTemplate(index) {
 	const pg = code.Tour[index]
 	[DIV.CONTAINER,
@@ -56,27 +59,28 @@ func<hiccups.defhtml> pageTemplate(index) {
 		[DIV.ROW, [DIV.COL_MD_6,
 			[UL.NAV.NAV_PILLS.NAV_JUSTIFIED,
 				[LI.ACTIVE, [A#JVM, {HREF: "#"}, "JVM"]],
-				[LI,        [A#JS,  {HREF: "#"}, "JavaScript"]]
+				[LI,	    [A#JS,  {HREF: "#"}, "JavaScript"]]
 			]
 		]]
 	]
  }
 
-
+// HTTP PUT of the data to the URL, calling back the success function when done
 func ajaxPut(url, data, success) {
 	jQ->ajax(jsObj(
-		"type",    "PUT",
-		"url",     url,
-		"data",    data,
+		"type",	   "PUT",
+		"url",	   url,
+		"data",	   data,
 		"success", success
 	))
 }
 
+// HTTP GET of the URL, calling back either the success or the error function
 func ajaxGet(url, success, error) {
 	jQ->ajax(jsObj(
-		"url",     url,
+		"url",	   url,
 		"success", success,
-		"error",    error
+		"error",   error
 	))
 }
 
@@ -84,24 +88,31 @@ func startsWith(string, prefix) {
 	string->lastIndexOf(prefix, 0) == 0
 }
 
+// Resize the #fgo textbox in proportion to its content.
 func resizeFgo() {
 	const (
 		fgo = jQ("#fgo")
 		charCount = fgo->html()->_length
 	)
-	fgo->height(2 * charCount  min  jQ(js.window)->height() / 3)
+	fgo->height(2 * charCount  min	jQ(js.window)->height() / 3)
 }
 
+// Get the Clojure code parsed from some this Functional go text
 func getClj(index, fgoText) {
 	const(
+		// Determine which of the JVM/JS buttons is selected.
 		isJvm = jQ("#jvm")->parent()->hasClass("active")
 		filename = if isJvm {"main.go"} else {"main.gos"}
-		prefix  = "/"  str  js.md5(filename  str  fgoText)
+		// Use an MD5 hash to create an index.
+		prefix	= "/"  str  js.md5(filename  str  fgoText)
 	)
 	resizeFgo()
 	jQ("#out")->html("")
+	// First try getting the Clojure, assuming the Functional Go
+	// was sent to the server in a previous request.
 	ajaxGet(
-		prefix  str  "/clj",
+		prefix	str  "/clj",
+		// If fgoText was previously sent, than handled the returned CLojure text.
 		func(cljText){
 			if cljText startsWith "ERROR " {
 				jQ("#err")->html(cljText)
@@ -113,7 +124,7 @@ func getClj(index, fgoText) {
 				jQ("#out")->slideDown()
 				if isJvm {
 					ajaxGet(
-						prefix  str "/eval",
+						prefix	str "/eval",
 						func{ jQ("#out")->html($1) },
 						func{ jQ("#out")->html("EVAL FAILED") }
 					)
@@ -122,13 +133,23 @@ func getClj(index, fgoText) {
 				}
 			}
 		},
+		// If fgoText was not previously sent, then send it to the server.
 		func(){
-			ajaxPut(str(prefix, "/fgo/", filename), fgoText, func{getClj(index, fgoText)})
+			ajaxPut(str(prefix, "/fgo/", filename),
+				fgoText,
+				// Having sent it to the server,
+				// recursively call this function.
+				// This constitutes an asynchronous
+				// retry loop.
+				func{getClj(index, fgoText)}
+			)
 		}
 	)
 }
 
-func coreWithFgo(index, fgoText) {
+
+// Write the Functional
+func handleFgo(index, fgoText) {
 	jQ("#fgo")->html(fgoText)
 	jQ("#fgo")->keyup(func{getClj(index, jQ("#fgo")->val())})
 	jQ("#prev")->click(func{useTemplate(index - 1)})
@@ -137,14 +158,21 @@ func coreWithFgo(index, fgoText) {
 }
 
 func core(index) {
+	// Get the Functional Go text for the current page and process it.
 	ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"),
-		func{ coreWithFgo(index, $1) },
-		func{ coreWithFgo(index, "(((Insert Code Here)))") }
+		// If code successfully returned pass it along to handleFgo
+		func{ handleFgo(index, $1) },
+		// On error, pass placeholder text to handleFgo
+		func{ handleFgo(index, "(((Insert Code Here)))") }
 	)
 }
 
 func useTemplate(index) {
+	// Expand the template
 	jQ("#insert-here")->html(pageTemplate(index))
+
+	// Call the core code immediateley, and also later when either
+	// of the JVM or JS buttons are clicked.
 	core(index)
 	jQ("#jvm")->click(func(){
 		jQ("#jvm")->parent()->addClass("active")
@@ -158,7 +186,7 @@ func useTemplate(index) {
 	})
 }
 
+// Entry point. When everything is loaded display the first page.
 jQ(func(){
 	useTemplate(0)
 })
-

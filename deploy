@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-lein do  clean,  fgoc --force --sync,  cljsbuild once,  ring uberwar
+lein do  clean,  fgoc --force,  cljsbuild once,  ring uberwar
 
 war=`ls -tr target/*-standalone.war | tail -1`
 
