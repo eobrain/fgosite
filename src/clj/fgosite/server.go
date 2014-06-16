@@ -1,14 +1,38 @@
 package server
 import (
 	"clojure/java/io"
-	//"ring/adapter/jetty"
 	"compojure/route"
 	compojure "compojure/core"
         fgo "funcgo/main"
+	hiccup "hiccup/core"
+	"fgosite/tag"
 )
 
-// Map of Funcgo, indexed by ID
-const fgoResult = ref({})
+const (
+	// Map of Funcgo, indexed by ID
+	fgoResult = ref({})
+
+	html = [HTML,
+		[HEAD,
+			[META, {CHARSET: "utf-8"}],
+			[META, {HTTP_EQUIV: "X-UA-Compatible", CONTENT: "IE=edge"}],
+			[META, {NAME: "viewport", CONTENT: "width=device-width, initial-scale=1"}],
+			tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"),
+			tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"),
+			tag.Css("css/page.css")
+		],
+		[BODY,
+			[DIV#INSERT_HERE],
+			tag.Js("https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"),
+			tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
+			tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
+			tag.Js("js/md5.js"),
+			tag.Js("js/cljs.js")
+		]
+	]
+)
+
+
 func clj(id) {
 	(*fgoResult)(id)
 }
@@ -21,15 +45,18 @@ func parse(filename, fgoStr) {
 	}
 }
 
-
 compojure.defroutes(app,
-	compojure.GET("/",      [], io.resource("public/index.html")),
-	compojure.PUT("/:id/fgo/:filename", request, dosync({
+	compojure.GET("/",      [], {
+		STATUS: 200,
+		HEADERS: {"Content-Type": "text/html; charset=utf-8"},
+		BODY: hiccup.html(html)
+	}),
+ 	compojure.PUT("/:id/fgo/:filename", request, dosync({
 		const(
 			{{id: ID, filename: FILENAME}: ROUTE_PARAMS, body: BODY} = request
 			bodyStr = slurp(io.reader(body))
 		)
-		alter(fgoResult, 
+		alter(fgoResult,
 			func(rs){
 				rs += { id: parse(filename, bodyStr) }
 			}
@@ -49,8 +76,3 @@ compojure.defroutes(app,
 )
 
 var App = app
-
-//func _main(args...) {
-//	app  jetty.runJetty  {PORT: 3000}
-//}
-
