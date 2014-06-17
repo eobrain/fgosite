@@ -67,8 +67,8 @@ compojure.defroutes(app,
 		try{
 			const main = loadString(clj(id))
 			withOutStr(main())
-		} catch Exception e {
-			str(e->getMessage())
+		} catch Throwable e {
+			str(e)
 		}
 	}),
 	route.resources("/"),

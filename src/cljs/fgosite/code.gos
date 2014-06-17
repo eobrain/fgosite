@@ -46,8 +46,8 @@ var Tour = [
 	newPage(3, "How this Tour was built.",
 
 		[P, "This tour is built using Functional Go, including
-		a server component running on Google App Engine and a
-		client component that is compiled to JavaScript"]
+		a server component running in a Java web container and
+		a client component that is compiled to JavaScript"]
 
 	),
 
@@ -85,11 +85,41 @@ var Tour = [
 
 	),
 
-	newPage(23, "23"),
-	newPage(25, "25"),
-	newPage(26, "26"),
-	newPage(31, "31"),
-	newPage(40, "40"),
-	newPage(47, "47"),
-	newPage(65, "65")
+	newPage(23, "If with a short statement",
+
+		[P, "The if statement can start with a short statement
+		to execute before the condition."],
+
+		[P, "Variables declared by the statement are only in
+		scope until the end of the if."],
+
+		[P, "(Try putting v just before the end of the
+		function.) "]
+
+	),
+
+	newPage(25, "Loops and Functions",
+
+		[P, "As a simple way to play with functions and loops,
+		we implement the square root function using Newton's
+		method."],
+
+		[P, "In this case, Newton's method is to approximate
+		Sqrt(x) by picking a starting point z and then
+		repeating:"],
+
+		[P, [IMG, {SRC: "http://tour.golang.org/static/newton.png"}]],
+
+		[P, "One way of looping with Functional Go is with
+		tail recursion as shown here, where the recur()
+		construct makes a recursive call to the loop()
+		construct, but without using any net stack."]
+
+	),
+
+	newPage(26, "Structs"),
+	newPage(31, "Arrays"),
+	newPage(40, "Dict literals"),
+	newPage(47, "Switch"),
+	newPage(65, "Goroutines")
 ]

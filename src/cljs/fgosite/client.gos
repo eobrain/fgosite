@@ -78,7 +78,7 @@ func ajaxPut(url, data, success) {
 // HTTP GET of the URL, calling back either the success or the error function
 func ajaxGet(url, success, error) {
 	jQ->ajax(jsObj(
-		"url",	   url,
+		"url",	   url str "?1",
 		"success", success,
 		"error",   error
 	))

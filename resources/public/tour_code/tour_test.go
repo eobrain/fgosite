@@ -13,6 +13,7 @@ import (
 	m15 "tour15/main"
 	m16 "tour16/main"
 	m17 "tour17/main"
+	m22 "tour22/main"
 	m23 "tour23/main"
 	m25 "tour25/main"
 	m26 "tour26/main"
@@ -20,6 +21,7 @@ import (
 	m40 "tour40/main"
 	m47 "tour47/main"
 	// m52 "tour52/main"
+	m65 "tour65/main"
 )
 
 
@@ -48,8 +50,9 @@ test.fact("tour17", withOutStr(m17.main()), =>, `21
 `)
 test.fact("tour23", withOutStr(m23.main()), =>, `9 20
 `)
-test.fact("tour25", withOutStr(m25.main()), =>, `10.000000000000007
+test.fact("tour22", withOutStr(m22.main()), =>, `1.4142135623730951 2.0i
 `)
+test.fact("tour25", withOutStr(m25.main()), =>, `10.0000`)
 test.fact("tour26", withOutStr(m26.main()), =>, `{1 2}
 `)
 test.fact("tour31", withOutStr(m31.main()), =>, `Hello World
@@ -58,3 +61,13 @@ test.fact("tour31", withOutStr(m31.main()), =>, `Hello World
 test.fact("tour40", withOutStr(m40.main()), =>, `map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
 `)
 test.fact("tour47", withOutStr(m47.main()), =>, `Go runs on clojure.`)
+test.fact("tour65", withOutStr(m65.main()), =>, `hello
+world
+hello
+world
+hello
+world
+hello
+world
+hello
+`)
