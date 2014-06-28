@@ -75,11 +75,11 @@ func ajaxPut(url, data, success) {
 	))
 }
 
-// HTTP GET of the URL, calling back either the success or the error function
+// HTTP GET of the URL, returning a channel with the result (or ERROR)
 func ajaxGet(url) {
-	const c = make(chan c)
+	const c = make(chan)
 	jQ->ajax(jsObj(
-		"url",	   url str "?1",  // TODO(eob) remove query option
+		"url",	   url,
 		"success", func{go{c <: $1}},
 		"error",   func{go{c <: ERROR}},
 	))
