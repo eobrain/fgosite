@@ -121,5 +121,7 @@ var Tour = [
 	newPage(31, "Arrays"),
 	newPage(40, "Dict literals"),
 	newPage(47, "Switch"),
-	newPage(65, "Goroutines")
+	newPage(65, "Goroutines"),
+	newPage(66, "Channels, Go Style"),
+	newPage("66b", "Channels, Funcgo Style")
 ]

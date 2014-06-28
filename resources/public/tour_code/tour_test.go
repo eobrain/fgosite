@@ -22,6 +22,8 @@ import (
 	m47 "tour47/main"
 	// m52 "tour52/main"
 	m65 "tour65/main"
+	m66 "tour66/main"
+	m66f "tour66f/main"
 )
 
 
@@ -71,3 +73,5 @@ hello
 world
 hello
 `)
+test.fact("tour66",  withOutStr(m66.main()),  =>, /(-5 17|17 -5) 12\n/)
+test.fact("tour66f", withOutStr(m66f.main()), =>, /(-5 17|17 -5) 12\n/)

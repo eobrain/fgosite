@@ -76,12 +76,14 @@ func ajaxPut(url, data, success) {
 }
 
 // HTTP GET of the URL, calling back either the success or the error function
-func ajaxGet(url, success, error) {
+func ajaxGet(url) {
+	const c = make(chan c)
 	jQ->ajax(jsObj(
-		"url",	   url str "?1",
-		"success", success,
-		"error",   error
+		"url",	   url str "?1",  // TODO(eob) remove query option
+		"success", func{go{c <: $1}},
+		"error",   func{go{c <: ERROR}},
 	))
+	c
 }
 
 func startsWith(string, prefix) {
@@ -110,10 +112,20 @@ func getClj(index, fgoText) {
 	jQ("#out")->html("")
 	// First try getting the Clojure, assuming the Functional Go
 	// was sent to the server in a previous request.
-	ajaxGet(
-		prefix	str  "/clj",
-		// If fgoText was previously sent, than handled the returned CLojure text.
-		func(cljText){
+	go {
+		const cljText = <:ajaxGet(prefix  str  "/clj")
+		if cljText == ERROR {
+			// If fgoText was not previously sent, then send it to the server.
+			ajaxPut(str(prefix, "/fgo/", filename),
+				fgoText,
+				// Having sent it to the server,
+				// recursively call this function.
+				// This constitutes an asynchronous
+				// retry loop.
+				func{getClj(index, fgoText)}
+			)
+		} else {
+			// If fgoText was previously sent, than handled the returned CLojure text.
 			if cljText startsWith "ERROR " {
 				jQ("#err")->html(cljText)
 				jQ("#err")->slideDown()
@@ -123,28 +135,18 @@ func getClj(index, fgoText) {
 				jQ("#err")->html("")
 				jQ("#out")->slideDown()
 				if isJvm {
-					ajaxGet(
-						prefix	str "/eval",
-						func{ jQ("#out")->html($1) },
-						func{ jQ("#out")->html("EVAL FAILED") }
-					)
+					const eval = <:ajaxGet(prefix  str  "/eval")
+					if eval == ERROR {
+						jQ("#out")->html("EVAL FAILED")
+					} else {
+						jQ("#out")->html(eval)
+					}
 				} else {
 					jQ("#out")->slideUp()
 				}
 			}
-		},
-		// If fgoText was not previously sent, then send it to the server.
-		func(){
-			ajaxPut(str(prefix, "/fgo/", filename),
-				fgoText,
-				// Having sent it to the server,
-				// recursively call this function.
-				// This constitutes an asynchronous
-				// retry loop.
-				func{getClj(index, fgoText)}
-			)
 		}
-	)
+	}
 }
 
 
@@ -158,13 +160,14 @@ func handleFgo(index, fgoText) {
 }
 
 func core(index) {
-	// Get the Functional Go text for the current page and process it.
-	ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"),
-		// If code successfully returned pass it along to handleFgo
-		func{ handleFgo(index, $1) },
-		// On error, pass placeholder text to handleFgo
-		func{ handleFgo(index, "(((Insert Code Here)))") }
-	)
+	go{
+		// Get the Functional Go text for the current page and process it.
+		const fgoText = <:ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"))
+		handleFgo(
+			index,
+			if fgoText == ERROR { "(((Insert Code Here)))" } else { fgoText }
+		)
+	}
 }
 
 func useTemplate(index) {
