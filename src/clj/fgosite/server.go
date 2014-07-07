@@ -8,29 +8,27 @@ import (
 	"fgosite/tag"
 )
 
-const (
-	// Map of Funcgo, indexed by ID
-	fgoResult = ref({})
+// Map of Funcgo, indexed by ID
+fgoResult := ref({})
 
-	html = [HTML,
-		[HEAD,
-			[META, {CHARSET: "utf-8"}],
-			[META, {HTTP_EQUIV: "X-UA-Compatible", CONTENT: "IE=edge"}],
-			[META, {NAME: "viewport", CONTENT: "width=device-width, initial-scale=1"}],
-			tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"),
-			tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"),
-			tag.Css("css/page.css")
-		],
-		[BODY,
-			[DIV#INSERT_HERE],
-			tag.Js("https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"),
-			tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
-			tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
-			tag.Js("js/md5.js"),
-			tag.Js("js/cljs.js")
-		]
+html := [HTML,
+	[HEAD,
+		[META, {CHARSET: "utf-8"}],
+		[META, {HTTP_EQUIV: "X-UA-Compatible", CONTENT: "IE=edge"}],
+		[META, {NAME: "viewport", CONTENT: "width=device-width, initial-scale=1"}],
+		tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"),
+		tag.Css("//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"),
+		tag.Css("css/page.css")
+	],
+	[BODY,
+		[DIV#INSERT_HERE],
+		tag.Js("https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"),
+		tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
+		tag.Js("//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"),
+		tag.Js("js/md5.js"),
+		tag.Js("js/cljs.js")
 	]
-)
+]
 
 
 func clj(id) {
@@ -52,10 +50,9 @@ compojure.defroutes(app,
 		BODY: hiccup.html(html)
 	}),
  	compojure.PUT("/:id/fgo/:filename", request, dosync({
-		const(
-			{{id: ID, filename: FILENAME}: ROUTE_PARAMS, body: BODY} = request
-			bodyStr = slurp(io.reader(body))
-		)
+		{{id: ID, filename: FILENAME}: ROUTE_PARAMS, body: BODY} := request
+		bodyStr := slurp(io.reader(body))
+
 		alter(fgoResult,
 			func(rs){
 				rs += { id: parse(filename, bodyStr) }
@@ -65,7 +62,7 @@ compojure.defroutes(app,
 	compojure.GET("/:id/clj", [id], clj(id)),
 	compojure.GET("/:id/eval", [id], {
 		try{
-			const main = loadString(clj(id))
+			main := loadString(clj(id))
 			withOutStr(main())
 		} catch Throwable e {
 			str(e)

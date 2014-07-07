@@ -8,16 +8,15 @@ func sum(a, c) {
 }
 
 func main() {
-	const (
-		a = [7, 2, 8, -9, 4, 0]
-		c = make(chan)
-		half = count(a)/2
-	)
+	a    := [7, 2, 8, -9, 4, 0]
+	c    := make(chan)
+	half := count(a)/2
+
 	go sum(half  drop  a, c)
 	go sum(half  take  a, c)
 	{
 		// receive from c
-		const [x, y] = [<-c, <-c]
+		[x, y] := [<-c, <-c]
 		fmt.Println(x, y, x + y)
 	}
 }

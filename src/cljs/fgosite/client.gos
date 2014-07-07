@@ -8,12 +8,12 @@ import(
 )
 
 // This is the equivalent of the $ variable in JavaSccript JQuery
-const jQ = \`js/jQuery`
+jQ := \`js/jQuery`
 
 // Use the Hiccups templating language to create HTML in the structure
 // that Bootstrap needs.
 func<hiccups.defhtml> pageTemplate(index) {
-	const pg = code.Tour[index]
+	pg := code.Tour[index]
 	[DIV.CONTAINER,
 		// Title at top of page
 		[DIV.PAGE_HEADER,
@@ -77,7 +77,7 @@ func ajaxPut(url, data, success) {
 
 // HTTP GET of the URL, returning a channel with the result (or ERROR)
 func ajaxGet(url) {
-	const c = make(chan)
+	c := make(chan)
 	jQ->ajax(jsObj(
 		"url",	   url,
 		"success", func{go{c <: $1}},
@@ -92,28 +92,26 @@ func startsWith(string, prefix) {
 
 // Resize the #fgo textbox in proportion to its content.
 func resizeFgo() {
-	const (
-		fgo = jQ("#fgo")
-		charCount = fgo->html()->_length
-	)
+	fgo       := jQ("#fgo")
+	charCount := fgo->html()->_length
+
 	fgo->height(2 * charCount  min	jQ(js.window)->height() / 3)
 }
 
 // Get the Clojure code parsed from some this Functional go text
 func getClj(index, fgoText) {
-	const(
 		// Determine which of the JVM/JS buttons is selected.
-		isJvm = jQ("#jvm")->parent()->hasClass("active")
-		filename = if isJvm {"main.go"} else {"main.gos"}
-		// Use an MD5 hash to create an index.
-		prefix	= "/"  str  js.md5(filename  str  fgoText)
-	)
+	isJvm    := jQ("#jvm")->parent()->hasClass("active")
+	filename := if isJvm {"main.go"} else {"main.gos"}
+	// Use an MD5 hash to create an index.
+	prefix	 := "/"  str  js.md5(filename  str  fgoText)
+
 	resizeFgo()
 	jQ("#out")->html("")
 	// First try getting the Clojure, assuming the Functional Go
 	// was sent to the server in a previous request.
 	go {
-		const cljText = <:ajaxGet(prefix  str  "/clj")
+		cljText := <:ajaxGet(prefix  str  "/clj")
 		if cljText == ERROR {
 			// If fgoText was not previously sent, then send it to the server.
 			ajaxPut(str(prefix, "/fgo/", filename),
@@ -135,7 +133,7 @@ func getClj(index, fgoText) {
 				jQ("#err")->html("")
 				jQ("#out")->slideDown()
 				if isJvm {
-					const eval = <:ajaxGet(prefix  str  "/eval")
+					eval := <:ajaxGet(prefix  str  "/eval")
 					if eval == ERROR {
 						jQ("#out")->html("EVAL FAILED")
 					} else {
@@ -162,7 +160,7 @@ func handleFgo(index, fgoText) {
 func core(index) {
 	go{
 		// Get the Functional Go text for the current page and process it.
-		const fgoText = <:ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"))
+		fgoText := <:ajaxGet(str("/tour_code/tour", NUM(code.Tour[index]), "/main.go"))
 		handleFgo(
 			index,
 			if fgoText == ERROR { "(((Insert Code Here)))" } else { fgoText }

@@ -8,12 +8,14 @@ func sum(a, c) {
 }
 
 func main() {
-    a := []int{7, 2, 8, -9, 4, 0}
+	a := []int{7, 2, 8, -9, 4, 0}
 
-    c := make(chan int)
-    go sum(a[:len(a)/2], c)
-    go sum(a[len(a)/2:], c)
-    x, y := <-c, <-c // receive from c
+	c := make(chan int)
+	go sum(a[:len(a)/2], c)
+	go sum(a[len(a)/2:], c)
+	{
+		x, y := <-c, <-c // receive from c
 
-    fmt.Println(x, y, x+y)
+		fmt.Println(x, y, x+y)
+	}
 }

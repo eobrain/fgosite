@@ -1,6 +1,6 @@
 package main
 
-const epsilon = 0.0001
+epsilon := 0.0001
 
 func Sqrt(x float64) float64 {
 
