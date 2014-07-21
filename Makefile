@@ -1,7 +1,5 @@
 # For deployment
 
-VERSION=0.1.4-SNAPSHOT
-
 WAR=target/fgosite-$(VERSION)-standalone.war
 
 

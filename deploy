@@ -2,7 +2,7 @@
 
 PROJECT=fgosite
 
-if [ $# != 1 ]; then
+if [ $# != 2 ]; then
     echo "USAGE:    $0 target tag"
     exit 1
 fi
@@ -20,6 +20,6 @@ git pull --tags
 git checkout $tag
 git status
 
-cmd="make $target"
+cmd="make VERSION=$tag $target"
 read -p "<ENTER> to '$cmd', or <CTRL>-C to abort" dummy
 $cmd

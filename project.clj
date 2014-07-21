@@ -1,4 +1,4 @@
-(defproject fgosite "0.1.5"
+(defproject fgosite "0.1.6"
   :description "Web site for Funcgo, written in Funcgo"
   :url "https://github.com/eobrain/funcgo"
   :dependencies [[org.clojure/clojure "1.6.0"]
