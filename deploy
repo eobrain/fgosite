@@ -1,7 +1,25 @@
-#!/bin/bash -x
+#!/bin/sh
 
-lein do  clean,  fgoc --force,  cljsbuild once,  ring uberwar
+PROJECT=fgosite
 
-war=`ls -tr target/*-standalone.war | tail -1`
+if [ $# != 1 ]; then
+    echo "USAGE:    $0 target tag"
+    exit 1
+fi
+target=$1
+tag=$2
 
-heroku deploy:war --war $war
+dir=/tmp/deploy-$PROJECT-$$
+mkdir -p $dir
+
+set -x
+cd $dir
+git clone git@github.com:eobrain/$PROJECT.git
+cd $PROJECT
+git pull --tags
+git checkout $tag
+git status
+
+cmd="make $target"
+read -p "<ENTER> to '$cmd', or <CTRL>-C to abort" dummy
+$cmd
