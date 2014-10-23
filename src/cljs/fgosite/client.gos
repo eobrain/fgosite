@@ -44,7 +44,7 @@ func<hiccups.defhtml> pageTemplate(index) {
 		[DIV.ROW, [DIV#ERR.COL_MD_12,
 
 			[P, "Compare to ", [A, {HREF:
-		"http://tour.golang.org/#" str NUM(pg)},
+		"http://tour.golang.org/#"  str  NUM(pg)},
 		"corresponding Go code"], " on a Tour of Go"]
 
 		]],
@@ -124,7 +124,7 @@ func getClj(index, fgoText) {
 			)
 		} else {
 			// If fgoText was previously sent, than handled the returned CLojure text.
-			if cljText startsWith "ERROR " {
+			if cljText  startsWith  "ERROR " {
 				jQ("#err")->html(cljText)
 				jQ("#err")->slideDown()
 			} else {
